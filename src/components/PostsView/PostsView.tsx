@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback } from "react";
+import React, { useEffect, useCallback, useState } from "react";
 import { DataView } from "primereact/dataview";
 import { getAllPosts } from "../../pages/api/crud/getAllPosts";
 import { useDispatch, useSelector } from "react-redux";
@@ -34,6 +34,8 @@ export interface Post {
 
 export default function SortingDemo() {
   const dispatch = useDispatch();
+
+  const [queryParamsUpdated, setQueryParamsUpdated] = useState(false);
 
   const sortField = useSelector(
     (state: RootState) => state.postsView.selected.sortField
@@ -74,11 +76,14 @@ export default function SortingDemo() {
         )}`
       )
     );
+    setQueryParamsUpdated(true);
   }, [sortField, sortOrder, currentPage, filterValue, filterKey, startIndex]);
 
-  const renderPage = useCallback(() => {
+  const renderPage = useCallback(async () => {
+    if (!queryParamsUpdated) {
+      return;
+    }
     const token = getToken();
-    (async () => {
       try {
         // Make API call to submit form data
         const response = await getAllPosts(token, queryParams);
@@ -106,8 +111,7 @@ export default function SortingDemo() {
       } catch (error) {
         console.error(error);
       }
-    })();
-  }, [sortField, sortOrder, queryParams, startIndex]);
+  }, [queryParamsUpdated, queryParams, dispatch]);
 
   useEffect(() => {
     queryParamsInURL();

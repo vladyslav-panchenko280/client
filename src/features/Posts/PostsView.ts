@@ -43,8 +43,8 @@ const initialState: PostsView = {
   ],
   selected: {
     sortKey: "",
-    sortOrder: 1,
-    sortField: "",
+    sortOrder: -1,
+    sortField: "isoDate",
     filterKey: "",
     filterValue: "",
   },

@@ -5,11 +5,10 @@ import { Button } from "primereact/button";
 import { deletePost } from "../../pages/api/crud/deletePost";
 import { getToken } from "../../pages/api/getToken";
 import { ModalUpdate } from "./ModalUpdate";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 // Template for customizing the layout of the PostsView component
 const PostTemplate = (post: Post) => {
-  const [currentState] = useState(post);
   return (
     <div className="col-12 my-4">
       <div className="flex flex-column xl:flex-row xl:align-items-start p-4 gap-4">
@@ -31,7 +30,7 @@ const PostTemplate = (post: Post) => {
                 </div>
               </div>
               <div className="flex gap-4">
-                <ModalUpdate data={currentState} />
+                <ModalUpdate data={post} />
                 <Button
                   icon="pi pi-times"
                   className="p-button-danger"

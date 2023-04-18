@@ -31,7 +31,7 @@ const initialState: PostsCRUD = {
     totalPages: 1,
   },
   postsData: [],
-  queryParams: "?page=1&sortBy=isoDate&sortOrder=-1&filterBy=&filterValue=",
+  queryParams: "",
 };
 
 // Create a Redux slice using createSlice from @reduxjs/toolkit

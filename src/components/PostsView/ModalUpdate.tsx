@@ -28,7 +28,6 @@ export const ModalUpdate = ({ data }: { data: Post }) => {
   const [visible, setVisible] = useState(false);
   const [isError, setError] = useState("");
   const dispatch = useDispatch();
-  const [currentPost] = useState<Post>();
   const postState = useSelector(
     (state: RootState) => state.postValidator,
     shallowEqual
