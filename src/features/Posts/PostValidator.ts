@@ -47,8 +47,7 @@ const formSlice = createSlice({
       state.link = action.payload;
     },
     setPubDate: (state, action: PayloadAction<string>) => {
-      const date = new Date(action.payload);
-      state.pubDate = date.toString();
+      state.pubDate = action.payload;
     },
     setDcCreator: (state, action: PayloadAction<string>) => {
       state["dc:creator"] = action.payload;
@@ -66,9 +65,7 @@ const formSlice = createSlice({
       state.categories = action.payload;
     },
     setIsoDate: (state, action: PayloadAction<string>) => {
-      const inputDate = new Date(action.payload);
-      const isoDateString = inputDate.toISOString();
-      state.isoDate = isoDateString;
+      state.isoDate = action.payload;
     },
     setResetValues: (state) => {
       state.creator = "";

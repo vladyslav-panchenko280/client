@@ -165,13 +165,14 @@ export const ModalUpdate = ({ data }: { data: Post }) => {
             className="flex"
             showTime
             id="pubDate"
-            value={postState.pubDate}
+            value={new Date(postState.pubDate)}
             aria-describedby="pubDate-help"
             dateFormat="D, d M yy"
             hourFormat="24"
             onChange={(e: any) => {
-              dispatch(setPubDate(e.value));
-              dispatch(setIsoDate(e.value));
+              const date = new Date(e.value);
+              dispatch(setPubDate(date.toString()));
+              dispatch(setIsoDate(date.toISOString()));
             }}
           />
           <small id="pubDate-help">
