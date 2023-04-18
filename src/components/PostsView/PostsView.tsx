@@ -32,7 +32,7 @@ export interface Post {
   isoDate: string;
 }
 
-export default function SortingDemo() {
+export const PostsView = () => {
   const dispatch = useDispatch();
 
   const [queryParamsUpdated, setQueryParamsUpdated] = useState(false);
@@ -137,3 +137,4 @@ export default function SortingDemo() {
     </div>
   );
 }
+export default PostsView;
