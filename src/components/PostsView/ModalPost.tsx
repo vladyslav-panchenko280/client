@@ -145,8 +145,9 @@ export const ModalPost = () => {
             dateFormat="D, d M yy"
             hourFormat="24"
             onChange={(e: any) => {
-              dispatch(setPubDate(e.value));
-              dispatch(setIsoDate(e.value));
+              const date = new Date(e.value);
+              dispatch(setPubDate(date.toString()));
+              dispatch(setIsoDate(date.toISOString()));
             }}
           />
           <small id="pubDate-help">
