@@ -33,7 +33,7 @@ export const ModalUpdate = ({ data }: { data: Post }) => {
     shallowEqual
   );
 
-  const setPostToUpdate = useCallback(() => {}, [postState]);
+  const setPostToUpdate = useCallback(() => { }, [postState]);
 
   useEffect(() => {
     setPostToUpdate();
@@ -94,7 +94,10 @@ export const ModalUpdate = ({ data }: { data: Post }) => {
         header="Header"
         visible={visible}
         style={{ width: "50vw", borderColor: isError ? "red" : "" }}
-        onHide={() => setVisible(false)}
+        onHide={() => {
+          setVisible(false)
+          dispatch(setResetValues())
+        }}
         footer={updatePostOptions}
       >
         <div className="flex flex-column gap-2 mb-4">
