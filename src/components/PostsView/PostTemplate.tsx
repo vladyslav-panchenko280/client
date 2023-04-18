@@ -5,7 +5,6 @@ import { Button } from "primereact/button";
 import { deletePost } from "../../pages/api/crud/deletePost";
 import { getToken } from "../../pages/api/getToken";
 import { ModalUpdate } from "./ModalUpdate";
-import { useState, useEffect } from "react";
 
 // Template for customizing the layout of the PostsView component
 const PostTemplate = (post: Post) => {

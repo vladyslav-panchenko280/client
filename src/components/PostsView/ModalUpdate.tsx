@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState } from "react";
 import { InputTextarea } from "primereact/inputtextarea";
 import { Button } from "primereact/button";
 import { Dialog } from "primereact/dialog";
@@ -32,12 +32,6 @@ export const ModalUpdate = ({ data }: { data: Post }) => {
     (state: RootState) => state.postValidator,
     shallowEqual
   );
-
-  const setPostToUpdate = useCallback(() => { }, [postState]);
-
-  useEffect(() => {
-    setPostToUpdate();
-  }, [setPostToUpdate]);
 
   const closeHandle = () => {
     dispatch(setResetValues());
@@ -95,8 +89,8 @@ export const ModalUpdate = ({ data }: { data: Post }) => {
         visible={visible}
         style={{ width: "50vw", borderColor: isError ? "red" : "" }}
         onHide={() => {
-          setVisible(false)
-          dispatch(setResetValues())
+          setVisible(false);
+          dispatch(setResetValues());
         }}
         footer={updatePostOptions}
       >

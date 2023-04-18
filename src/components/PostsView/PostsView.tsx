@@ -84,33 +84,33 @@ export const PostsView = () => {
       return;
     }
     const token = getToken();
-      try {
-        // Make API call to submit form data
-        const response = await getAllPosts(token, queryParams);
+    try {
+      // Make API call to submit form data
+      const response = await getAllPosts(token, queryParams);
 
-        // Handle response
-        if (response.status === 200) {
-          const result = await response.json();
-          // Get posts
-          dispatch(setPosts(result.data));
-          // Get total posts count
-          dispatch(setTotalPosts(result.info.totalPosts));
-          // Get total pages count
-          dispatch(setTotalPages(result.info.totalPages));
-          // Get all found posts
-          dispatch(setPostsFound(result.info.postsFound));
-          // Get start index
-          dispatch(setStartIndex(result.info.startIndex));
-          // Get page size
-          dispatch(setPageSize(result.info.pageSize));
-          // Get current page
-          dispatch(setCurrentPage(result.info.currentPage));
-        } else {
-          Router.push("/login");
-        }
-      } catch (error) {
-        console.error(error);
+      // Handle response
+      if (response.status === 200) {
+        const result = await response.json();
+        // Get posts
+        dispatch(setPosts(result.data));
+        // Get total posts count
+        dispatch(setTotalPosts(result.info.totalPosts));
+        // Get total pages count
+        dispatch(setTotalPages(result.info.totalPages));
+        // Get all found posts
+        dispatch(setPostsFound(result.info.postsFound));
+        // Get start index
+        dispatch(setStartIndex(result.info.startIndex));
+        // Get page size
+        dispatch(setPageSize(result.info.pageSize));
+        // Get current page
+        dispatch(setCurrentPage(result.info.currentPage));
+      } else {
+        Router.push("/login");
       }
+    } catch (error) {
+      console.error(error);
+    }
   }, [queryParamsUpdated, queryParams, dispatch]);
 
   useEffect(() => {
@@ -136,5 +136,5 @@ export const PostsView = () => {
       />
     </div>
   );
-}
+};
 export default PostsView;

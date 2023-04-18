@@ -48,6 +48,7 @@ const NativePaginator: React.FC<NativePaginatorProps> = ({
       onPageChange={(e) => {
         dispatch(setCurrentPage(e.page + 1));
         setFirst(e.first);
+        window.scrollTo({ top: 0, behavior: 'smooth' })
       }}
       className={className}
     />
