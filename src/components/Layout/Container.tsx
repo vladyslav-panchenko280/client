@@ -1,9 +1,5 @@
-import { ReactNode, FC } from "react";
-
-interface ContainerInterface {
-  children: ReactNode;
-  className?: string;
-}
+import { FC } from "react";
+import type { ContainerInterface } from "lib/types/Container";
 
 // Container which provide 8/10 width for item
 const Container: FC<ContainerInterface> = ({ children, className }) => {

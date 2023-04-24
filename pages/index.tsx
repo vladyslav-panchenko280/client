@@ -1,7 +1,7 @@
 import Head from "next/head";
-import Layout from "../components/Layout/Layout";
-import Container from "../components/Layout/Container";
-import PostsView from "../components/PostsView/PostsView";
+import Layout from "src/components/Layout/Layout";
+import Container from "src/components/Layout/Container";
+import PostsView from "src/components/PostsView/PostsView";
 
 // Our index page
 const IndexPage = () => {

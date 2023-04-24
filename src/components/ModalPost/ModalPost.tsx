@@ -6,9 +6,7 @@ import { InputText } from "primereact/inputtext";
 import { Editor } from "primereact/editor";
 import { Calendar } from "primereact/calendar";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
-import type { Post } from "./PostsView";
-import { updatePost } from "../../pages/api/crud/updatePost";
-import { RootState } from "../../store/store";
+import { RootState } from "../../app/store";
 import {
   setTitle,
   setCreator,
@@ -21,10 +19,17 @@ import {
   setCategories,
   setResetValues,
   setGuid,
-} from "../../features/Posts/PostValidator";
-import { getToken } from "../../pages/api/getToken";
+} from "src/features/Posts/PostValidator";
+import type { ModalInterface } from "lib/types/ModalPost";
+import InputModal from "src/components/ModalPost/InputModal";
 
-export const ModalUpdate = ({ data }: { data: Post }) => {
+const ModalPost: React.FC<ModalInterface> = ({
+  data,
+  submitFunc,
+  triggerFunc,
+  icon,
+  label,
+}) => {
   const [visible, setVisible] = useState(false);
   const [isError, setError] = useState("");
   const dispatch = useDispatch();
@@ -51,11 +56,10 @@ export const ModalUpdate = ({ data }: { data: Post }) => {
         label="Yes"
         icon="pi pi-check"
         onClick={async () => {
-          const token = getToken();
-          const response = await updatePost(token, postState.guid, postState);
+          const response = await submitFunc();
           if (!response.ok) {
             const result = await response.json();
-            setError(result.err.message);
+            setError(result.message);
           } else {
             closeHandle();
           }
@@ -67,21 +71,12 @@ export const ModalUpdate = ({ data }: { data: Post }) => {
   return (
     <div className="card flex justify-content-center">
       <Button
-        label={""}
-        icon={"pi pi-pencil"}
+        label={label && label}
+        icon={icon}
         className="mr-2"
         onClick={() => {
           setVisible(true);
-          dispatch(setTitle(data.title));
-          dispatch(setCreator(data.creator));
-          dispatch(setDcCreator(data["dc:creator"]));
-          dispatch(setLink(data.link));
-          dispatch(setIsoDate(data.isoDate));
-          dispatch(setPubDate(data.pubDate));
-          dispatch(setCategories(data.categories));
-          dispatch(setContent(data.content));
-          dispatch(setContentSnippet(data.contentSnippet));
-          dispatch(setGuid(data.guid));
+          triggerFunc && triggerFunc(data);
         }}
       />
       <Dialog
@@ -94,42 +89,31 @@ export const ModalUpdate = ({ data }: { data: Post }) => {
         }}
         footer={updatePostOptions}
       >
-        <div className="flex flex-column gap-2 mb-4">
-          <label htmlFor="title">Title</label>
+        <InputModal title={"Title of the post"} metaTitle="title">
           <InputText
             value={postState.title}
             id="title"
             onChange={(e: any) => dispatch(setTitle(e.target.value))}
             aria-describedby="title-help"
           />
-          <small id="title-help">Enter title for the new post.</small>
-        </div>
-        <div className="flex flex-column gap-2 mb-4">
-          <label htmlFor="cretor">Creator&apos;s name</label>
+        </InputModal>
+        <InputModal title={"Creator's name"} metaTitle="creator">
           <InputText
-            id="cretor"
+            id="creator"
             value={postState.creator}
-            aria-describedby="cretor-help"
+            aria-describedby="creator-help"
             onChange={(e: any) => dispatch(setCreator(e.target.value))}
           />
-          <small id="creator-help">
-            Enter creator&apos;s name for the new post.
-          </small>
-        </div>
-        <div className="flex flex-column gap-2 mb-4">
-          <label htmlFor="dc:cretor">Document creator&apos;s name</label>
+        </InputModal>
+        <InputModal title="Document creator's name" metaTitle="dc:creator">
           <InputText
             value={postState["dc:creator"]}
-            id="dc:cretor"
+            id="dc:creator"
             aria-describedby="dc:cretor-help"
             onChange={(e: any) => dispatch(setDcCreator(e.target.value))}
           />
-          <small id="dc:creator-help">
-            Enter document creator&apos;s name for the new post.
-          </small>
-        </div>
-        <div className="flex flex-column gap-2 mb-4">
-          <label htmlFor="snippet">Content Snippet</label>
+        </InputModal>
+        <InputModal title="Content snippet" metaTitle="snippet">
           <InputTextarea
             id="snippet"
             value={postState.contentSnippet}
@@ -138,12 +122,8 @@ export const ModalUpdate = ({ data }: { data: Post }) => {
             cols={30}
             onChange={(e: any) => dispatch(setContentSnippet(e.target.value))}
           />
-          <small id="snippet-help">
-            Enter content snippet for the future post.
-          </small>
-        </div>
-        <div className="flex flex-column gap-2 mb-4">
-          <label htmlFor="content">Content</label>
+        </InputModal>
+        <InputModal title="Content" metaTitle="content">
           <Editor
             id="content"
             value={postState.content}
@@ -151,10 +131,8 @@ export const ModalUpdate = ({ data }: { data: Post }) => {
             aria-describedby="content-help"
             style={{ height: "320px" }}
           />
-          <small id="content-help">Enter content for the future post.</small>
-        </div>
-        <div className="flex flex-column gap-2 mb-4">
-          <label htmlFor="pubDate">Publish date</label>
+        </InputModal>
+        <InputModal title="Publish date" metaTitle="pubDate">
           <Calendar
             className="flex"
             showTime
@@ -169,45 +147,31 @@ export const ModalUpdate = ({ data }: { data: Post }) => {
               dispatch(setIsoDate(date.toISOString()));
             }}
           />
-          <small id="pubDate-help">
-            Enter publish date of the future post.
-          </small>
-        </div>
-        <div className="flex flex-column gap-2 mb-4">
-          <label htmlFor="link">Link</label>
+        </InputModal>
+        <InputModal title="Link" metaTitle="link">
           <InputText
             id="link"
             value={postState.link}
             aria-describedby="link-help"
             onChange={(e: any) => dispatch(setLink(e.target.value))}
           />
-          <small id="link-help">Enter the link for the post.</small>
-        </div>
-        <div className="flex flex-column gap-2 mb-4">
-          <label htmlFor="categories">Categories</label>
+        </InputModal>
+        <InputModal title="Categories" metaTitle="categories">
           <InputText
             id="categories"
             value={postState.categories.join(",")}
             aria-describedby="categories-help"
             onChange={(e: any) => dispatch(setCategories(e.target.value))}
           />
-          <small id="categories-help">
-            Enter categories for the post according the example:
-            finance,economy,bank
-          </small>
-        </div>
-        <div className="flex flex-column gap-2 mb-4">
-          <label htmlFor="guid">Guid</label>
+        </InputModal>
+        <InputModal title="Globally Unique Identifier" metaTitle="guid">
           <InputText
             id="guid"
             value={postState.guid}
-            aria-describedby="categories-help"
+            aria-describedby="guid-help"
             onChange={(e: any) => dispatch(setGuid(e.target.value))}
           />
-          <small id="categories-help">
-            Enter Globally Unique Identifier for the post.
-          </small>
-        </div>
+        </InputModal>
         {isError && (
           <div>
             <p style={{ color: "red" }}>{isError}</p>
@@ -217,3 +181,5 @@ export const ModalUpdate = ({ data }: { data: Post }) => {
     </div>
   );
 };
+
+export default ModalPost;

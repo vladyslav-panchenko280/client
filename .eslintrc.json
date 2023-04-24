@@ -34,7 +34,15 @@
   "ignorePatterns": ["node_modules/", "build/", ".next/"], // ignore specific folders
   "overrides": [
     {
-      "files": ["src/**/*.js", "src/**/*.ts", "src/**/*.jsx", "src/**/*.tsx"], // specify the src folder files to be linted
+      "files": [
+        "src/**/*.js",
+        "src/**/*.ts",
+        "src/**/*.jsx",
+        "src/**/*.tsx",
+        "lib/**/*.ts",
+        "pages/**/*.tsx",
+        "pages/**/*.ts"
+      ], // specify the src folder files to be linted
       "excludedFiles": "*.config.js", // exclude any specific files from linting
       "rules": {
         "node/no-missing-import": "off", // Turn off the no-missing-import rule

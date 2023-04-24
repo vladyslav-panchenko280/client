@@ -1,19 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
-
-// Interfaces for defining types
-export interface Post {
-  creator: string;
-  title: string;
-  link: string;
-  pubDate: string;
-  "dc:creator": string;
-  content: string;
-  contentSnippet: string;
-  guid: string;
-  categories: string[];
-  isoDate: string;
-}
+import type { Post } from "lib/types/postValidator";
 
 // Initial state for the state slice
 const initialState: Post = {

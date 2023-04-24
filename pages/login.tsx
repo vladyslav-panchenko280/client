@@ -1,7 +1,7 @@
 import Head from "next/head";
-import Layout from "../components/Layout/Layout";
-import LoginForm from "../components/LoginForm/LoginForm";
-import Container from "../components/Layout/Container";
+import Layout from "src/components/Layout/Layout";
+import LoginForm from "src/components/LoginForm/LoginForm";
+import Container from "src/components/Layout/Container";
 
 // Login component, in which we login and get token
 const Login = () => {

@@ -1,21 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
-
-// Interfaces for defining types
-export interface FormData {
-  username: string;
-  password: string;
-}
-
-export interface ErrorData {
-  message: string;
-}
-
-// Interface for defining the state shape
-export interface FormState {
-  formData: FormData;
-  errorMessage: ErrorData;
-}
+import type { FormState, ErrorData, FormData } from "lib/types/loginForm";
 
 // Initial state for the state slice
 const initialState: FormState = {

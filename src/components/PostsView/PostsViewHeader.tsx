@@ -1,15 +1,17 @@
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch, useSelector, shallowEqual } from "react-redux";
 import { useRef } from "react";
-import type { RootState } from "../../store/store";
+import type { RootState } from "src/app/store";
 import { Dropdown } from "primereact/dropdown";
 import {
   sortChange,
   setFilterKey,
   setFilterValue,
-} from "../../features/Posts/PostsView";
-import { ModalPost } from "./ModalPost";
+} from "src/features/Posts/PostsView";
 import { InputText } from "primereact/inputtext";
 import { Button } from "primereact/button";
+import { updatePost } from "lib/posts/updatePost";
+import { getToken } from "lib/utils/getToken";
+import ModalPost from "src/components/ModalPost/ModalPost";
 
 const PostsViewHeader = () => {
   const dispatch = useDispatch();
@@ -28,6 +30,16 @@ const PostsViewHeader = () => {
     (state: RootState) => state.postsView.filterOptions
   );
 
+  const postState = useSelector(
+    (state: RootState) => state.postValidator,
+    shallowEqual
+  );
+
+  const submitFunc = async () => {
+    const token = getToken();
+    return await updatePost(token, postState.guid, postState);
+  };
+
   const inputRef = useRef<HTMLInputElement>(null);
   return (
     <div className="flex flex-column justify-content-between xl:flex-row">
@@ -40,7 +52,12 @@ const PostsViewHeader = () => {
           onChange={(event) => dispatch(sortChange(event.value))}
           className="min-w-0"
         />
-        <ModalPost></ModalPost>
+        <ModalPost
+          data={postState}
+          submitFunc={submitFunc}
+          icon={"pi pi-plus"}
+          label="New post"
+        />
       </div>
       <div className="p-inputgroup flex min-w-0 w-auto">
         <Dropdown

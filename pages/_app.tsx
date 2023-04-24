@@ -1,4 +1,4 @@
-import "../styles/globals.css";
+import "src/styles/globals.css";
 // Core
 import "primereact/resources/primereact.min.css";
 // Icons
@@ -10,7 +10,7 @@ import "primereact/resources/themes/lara-light-indigo/theme.css";
 
 import type { AppProps } from "next/app";
 import { Provider } from "react-redux";
-import store from "../store/store";
+import store from "src/app/store";
 import PrimeReact from "primereact/api";
 
 PrimeReact.ripple = true;

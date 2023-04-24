@@ -1,9 +1,5 @@
-import { ReactNode, FC } from "react";
-
-interface MainInterface {
-  children: ReactNode;
-  className?: string;
-}
+import { FC } from "react";
+import type { MainInterface } from "lib/types/Main";
 
 // Standart main styling
 const Main: FC<MainInterface> = ({ children, className }) => {

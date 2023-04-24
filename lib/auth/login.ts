@@ -1,8 +1,9 @@
-import { FormData } from "../../features/Login/loginService";
+import { FormData } from "lib/types/loginForm";
+import { AUTH_ENDPOINT } from "lib/constants/endpoints";
 
 // Standart login form
 export const login = async ({ username, password }: FormData) => {
-  return await fetch("http://localhost:3010/api/login", {
+  return await fetch(AUTH_ENDPOINT, {
     method: "POST",
     mode: "cors",
     headers: {

@@ -1,11 +1,11 @@
 import React, { useEffect, useCallback, useState } from "react";
 import { DataView } from "primereact/dataview";
-import { getAllPosts } from "../../pages/api/crud/getAllPosts";
+import { getAllPosts } from "lib/posts/getAllPosts";
 import { useDispatch, useSelector } from "react-redux";
-import { getToken } from "../../pages/api/getToken";
-import { RootState } from "../../store/store";
-import { PostsViewHeader } from "./PostsViewHeader";
-import { PostTemplate } from "./PostTemplate";
+import { getToken } from "lib/utils/getToken";
+import { RootState } from "src/app/store";
+import { PostsViewHeader } from "src/components/PostsView/PostsViewHeader";
+import { PostTemplate } from "src/components/PostsView/PostTemplate";
 import {
   setPosts,
   setTotalPosts,
@@ -15,22 +15,9 @@ import {
   setPostsFound,
   setStartIndex,
   setQueryParams,
-} from "../../features/Posts/PostsCRUD";
-import NativePaginator from "./NativePaginator";
+} from "src/features/Posts/PostsCRUD";
+import NativePaginator from "src/components/NativePaginator/NativePaginator";
 import Router from "next/router";
-
-export interface Post {
-  creator: string;
-  title: string;
-  link: string;
-  pubDate: string;
-  "dc:creator": string;
-  content: string;
-  contentSnippet: string;
-  guid: string;
-  categories: string[];
-  isoDate: string;
-}
 
 export const PostsView = () => {
   const dispatch = useDispatch();
@@ -92,19 +79,19 @@ export const PostsView = () => {
       if (response.status === 200) {
         const result = await response.json();
         // Get posts
-        dispatch(setPosts(result.data));
+        dispatch(setPosts(result.data.data));
         // Get total posts count
-        dispatch(setTotalPosts(result.info.totalPosts));
+        dispatch(setTotalPosts(result.data.info.totalPosts));
         // Get total pages count
-        dispatch(setTotalPages(result.info.totalPages));
+        dispatch(setTotalPages(result.data.info.totalPages));
         // Get all found posts
-        dispatch(setPostsFound(result.info.postsFound));
+        dispatch(setPostsFound(result.data.info.postsFound));
         // Get start index
-        dispatch(setStartIndex(result.info.startIndex));
+        dispatch(setStartIndex(result.data.info.startIndex));
         // Get page size
-        dispatch(setPageSize(result.info.pageSize));
+        dispatch(setPageSize(result.data.info.pageSize));
         // Get current page
-        dispatch(setCurrentPage(result.info.currentPage));
+        dispatch(setCurrentPage(result.data.info.currentPage));
       } else {
         Router.push("/login");
       }

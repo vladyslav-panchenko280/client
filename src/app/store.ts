@@ -1,14 +1,13 @@
 import { configureStore } from "@reduxjs/toolkit";
 import loginFormReducer from "../features/Login/loginService";
-import { FormState } from "../features/Login/loginService";
-import { PostsView } from "../features/Posts/PostsView";
-import { PostsCRUD } from "../features/Posts/PostsCRUD";
-import PostsCRUDReducer from "../features/Posts/PostsCRUD";
-import PostsViewReducer from "../features/Posts/PostsView";
-import PostValidatorReducer from "../features/Posts/PostValidator";
-import { Post } from "../features/Posts/PostValidator";
+import type { FormState } from "lib/types/loginForm";
+import type { PostsView } from "lib/types/postsView";
+import type { PostsCRUD } from "lib/types/postsCRUD";
+import PostsCRUDReducer from "src/features/Posts/PostsCRUD";
+import PostsViewReducer from "src/features/Posts/PostsView";
+import PostValidatorReducer from "src/features/Posts/PostValidator";
+import type { Post } from "lib/types/postValidator";
 
-// Define the RootState interface
 export interface RootState {
   loginForm: FormState;
   postsCRUD: PostsCRUD;
@@ -24,6 +23,10 @@ const store = configureStore({
     postsView: PostsViewReducer, // Add posts view reducer to the store
     postValidator: PostValidatorReducer, // Add post validator to the store
   },
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: false,
+    }),
 });
 
 export default store;

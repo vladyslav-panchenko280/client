@@ -1,29 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
-
-// Interfaces for defining types
-interface SortOption {
-  label: string;
-  value: string;
-}
-interface FilterOption {
-  name: string;
-  value: string;
-}
-interface SelectedOptions {
-  sortKey: string;
-  sortOrder: 1 | -1 | null | undefined;
-  sortField: string;
-  filterKey: string;
-  filterValue: string;
-}
-
-// Interface for defining the state shape
-export interface PostsView {
-  sortOptions: SortOption[];
-  filterOptions: FilterOption[];
-  selected: SelectedOptions;
-}
+import type { PostsView } from "lib/types/postsView";
 
 // Initial state for the state slice
 const initialState: PostsView = {

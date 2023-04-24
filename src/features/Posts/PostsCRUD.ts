@@ -1,24 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { Post } from "./PostValidator";
+import type { Post } from "lib/types/postValidator";
 import type { PayloadAction } from "@reduxjs/toolkit";
-
-// Interfaces for defining types
-
-interface PostsInfo {
-  currentPage: number;
-  totalPosts: number;
-  postsFound: number;
-  pageSize: number;
-  startIndex: number;
-  totalPages: number;
-}
-
-// Interface for defining the state shape
-export interface PostsCRUD {
-  postsInfo: PostsInfo;
-  postsData: Post[];
-  queryParams: string;
-}
+import type { PostsCRUD } from "lib/types/postsCRUD";
 
 // Initial state for the state slice
 const initialState: PostsCRUD = {

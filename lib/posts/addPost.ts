@@ -1,8 +1,9 @@
-import { Post } from "../../../features/Posts/PostValidator";
+import type { Post } from "lib/types/postValidator";
+import { POSTS_ENDPOINT } from "lib/constants/endpoints";
 
 // Add new post
 export const addPost = async (token: string, body: Post) => {
-  return await fetch(`http://localhost:3010/api/posts`, {
+  return await fetch(POSTS_ENDPOINT, {
     method: "POST",
     mode: "cors",
     body: JSON.stringify(body),

@@ -1,4 +1,4 @@
-import type { Post } from "../../../components/PostsView/PostsView";
+import { Post } from "lib/types/postValidator";
 // Delete post
 export const updatePost = async (
   token: string,

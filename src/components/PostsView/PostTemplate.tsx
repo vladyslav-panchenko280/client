@@ -1,13 +1,52 @@
 import { Tag } from "primereact/tag";
-import type { Post } from "./PostsView";
-import { HTMLParser } from "../../components/HTMLParser/HTMLParser";
+import type { Post } from "lib/types/postValidator";
+import { HTMLParser } from "src/components/HTMLParser/HTMLParser";
 import { Button } from "primereact/button";
-import { deletePost } from "../../pages/api/crud/deletePost";
-import { getToken } from "../../pages/api/getToken";
-import { ModalUpdate } from "./ModalUpdate";
+import { deletePost } from "lib/posts/deletePost";
+import { getToken } from "lib/utils/getToken";
+import ModalPost from "src/components/ModalPost/ModalPost";
+import { RootState } from "src/app/store";
+import { useSelector, shallowEqual, useDispatch } from "react-redux";
+import { addPost } from "lib/posts/addPost";
+import {
+  setTitle,
+  setCreator,
+  setDcCreator,
+  setContentSnippet,
+  setContent,
+  setPubDate,
+  setIsoDate,
+  setLink,
+  setCategories,
+  setGuid,
+} from "src/features/Posts/PostValidator";
 
 // Template for customizing the layout of the PostsView component
 const PostTemplate = (post: Post) => {
+  const dispatch = useDispatch();
+  const postState = useSelector(
+    (state: RootState) => state.postValidator,
+    shallowEqual
+  );
+
+  const sumbitFunc = async () => {
+    const token = getToken();
+    return await addPost(token, postState);
+  };
+
+  const setCurrentPost = () => {
+    dispatch(setTitle(post.title));
+    dispatch(setCreator(post.creator));
+    dispatch(setDcCreator(post["dc:creator"]));
+    dispatch(setLink(post.link));
+    dispatch(setIsoDate(post.isoDate));
+    dispatch(setPubDate(post.pubDate));
+    dispatch(setCategories(post.categories));
+    dispatch(setContent(post.content));
+    dispatch(setContentSnippet(post.contentSnippet));
+    dispatch(setGuid(post.guid));
+  };
+
   return (
     <div className="col-12 my-4">
       <div className="flex flex-column xl:flex-row xl:align-items-start p-4 gap-4">
@@ -29,7 +68,12 @@ const PostTemplate = (post: Post) => {
                 </div>
               </div>
               <div className="flex gap-4">
-                <ModalUpdate data={post} />
+                <ModalPost
+                  data={post}
+                  triggerFunc={setCurrentPost}
+                  submitFunc={sumbitFunc}
+                  icon={"pi pi-pencil"}
+                />
                 <Button
                   icon="pi pi-times"
                   className="p-button-danger"

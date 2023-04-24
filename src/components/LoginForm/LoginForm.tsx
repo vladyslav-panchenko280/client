@@ -1,15 +1,9 @@
-import { InputText } from "primereact/inputtext";
 import { Button } from "primereact/button";
-import { ChangeEvent } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  setFormData,
-  setErrorMessage,
-} from "../../features/Login/loginService";
-import { RootState } from "../../store/store";
+import { RootState } from "../../app/store";
+import { submitForm } from "pages/api/auth/submitForm";
 import { useRouter } from "next/router";
-import { FormData } from "../../features/Login/loginService";
-import { login } from "../../pages/api/login";
+import InputForm from "./InputForm";
 
 // Login Form
 const LoginForm = () => {
@@ -20,48 +14,6 @@ const LoginForm = () => {
     (state: RootState) => state.loginForm.errorMessage
   );
 
-  // Handle input changing while user typing
-  const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const { id, value } = event.target;
-
-    // Dynamically change form data
-    dispatch(
-      setFormData({
-        ...formData,
-        [id]: value,
-      })
-    );
-
-    // Clear error message
-    dispatch(setErrorMessage({ message: "" }));
-  };
-
-  // Async submit more function, which handle many errors
-  const submitForm = async (formData: FormData) => {
-    try {
-      // Make API call to submit form data
-      const response = await login(formData);
-
-      // Handle response
-      if (response.status === 200) {
-        const result = await response.json();
-        // Save our token
-        sessionStorage.setItem("x-token", result);
-        // Redirect to index page
-        router.push("/");
-      } else {
-        const errorResult = await response.json();
-        dispatch(setErrorMessage(errorResult));
-      }
-    } catch (error) {
-      dispatch(
-        setErrorMessage({
-          message: "Failed to submit the form. Please try again.",
-        })
-      );
-    }
-  };
-
   return (
     <div className="flex align-items-center justify-content-center w-full mb-8">
       <div className="surface-card p-7 shadow-2 border-round w-full lg:w-6">
@@ -70,34 +22,12 @@ const LoginForm = () => {
         </div>
 
         <div>
-          <label htmlFor="username" className="block text-900 font-medium mb-2">
-            Email
-          </label>
-          <InputText
-            id="username"
-            type="text"
-            placeholder={"Enter username"}
-            className={
-              errorMessage.message ? "w-full mb-3 p-invalid" : "w-full mb-3"
-            }
-            onChange={handleInputChange}
-          />
+          <InputForm title="Username" inputType="text" />
 
-          <label htmlFor="password" className="block text-900 font-medium mb-2">
-            Password
-          </label>
-          <InputText
-            id="password"
-            type="password"
-            placeholder={"Enter password"}
-            className={
-              errorMessage.message ? "w-full mb-3 p-invalid" : "w-full mb-3"
-            }
-            onChange={handleInputChange}
-          />
+          <InputForm title="Password" inputType="password" />
 
           <Button
-            onClick={async () => await submitForm(formData)}
+            onClick={async () => await submitForm(router, dispatch, formData)}
             label="Sign In"
             icon="pi pi-user"
             className="w-full mb-3 p-ripple"

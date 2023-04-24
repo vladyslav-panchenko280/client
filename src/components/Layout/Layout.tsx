@@ -1,10 +1,7 @@
-import { ReactNode, FC } from "react";
+import { FC } from "react";
 import Header from "./Header";
 import Main from "./Main";
-
-interface LayoutInterface {
-  children: ReactNode;
-}
+import type { LayoutInterface } from "lib/types/Layout";
 
 // Layout template
 const Layout: FC<LayoutInterface> = ({ children }) => {
