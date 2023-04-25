@@ -9,7 +9,7 @@ import {
 } from "src/features/Posts/PostsView";
 import { InputText } from "primereact/inputtext";
 import { Button } from "primereact/button";
-import { updatePost } from "lib/posts/updatePost";
+import { addPost } from "lib/posts/addPost";
 import { getToken } from "lib/utils/getToken";
 import ModalPost from "src/components/ModalPost/ModalPost";
 
@@ -37,7 +37,7 @@ const PostsViewHeader = () => {
 
   const submitFunc = async () => {
     const token = getToken();
-    return await updatePost(token, postState.guid, postState);
+    return await addPost(token, postState);
   };
 
   const inputRef = useRef<HTMLInputElement>(null);

@@ -7,7 +7,7 @@ import { getToken } from "lib/utils/getToken";
 import ModalPost from "src/components/ModalPost/ModalPost";
 import { RootState } from "src/app/store";
 import { useSelector, shallowEqual, useDispatch } from "react-redux";
-import { addPost } from "lib/posts/addPost";
+import { updatePost } from "lib/posts/updatePost";
 import {
   setTitle,
   setCreator,
@@ -31,7 +31,7 @@ const PostTemplate = (post: Post) => {
 
   const sumbitFunc = async () => {
     const token = getToken();
-    return await addPost(token, postState);
+    return await updatePost(token, postState.guid, postState);
   };
 
   const setCurrentPost = () => {
