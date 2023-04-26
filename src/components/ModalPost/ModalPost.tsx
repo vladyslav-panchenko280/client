@@ -22,6 +22,7 @@ import {
 } from "src/features/Posts/PostValidator";
 import type { ModalInterface } from "lib/types/ModalPost";
 import InputModal from "src/components/ModalPost/InputModal";
+import { validateModalPost } from "lib/validators/validateModalPost";
 
 const ModalPost: React.FC<ModalInterface> = ({
   data,
@@ -57,8 +58,14 @@ const ModalPost: React.FC<ModalInterface> = ({
         icon="pi pi-check"
         onClick={async () => {
           const response = await submitFunc();
+          const result = await response.json();
+
+          if (!(await validateModalPost(result))) {
+            setError("Invalid form data");
+            return;
+          }
+
           if (!response.ok) {
-            const result = await response.json();
             setError(result.message);
           } else {
             closeHandle();

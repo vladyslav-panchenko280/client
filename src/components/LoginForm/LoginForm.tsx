@@ -3,7 +3,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../app/store";
 import { submitForm } from "pages/api/auth/submitForm";
 import { useRouter } from "next/router";
+import { validateLoginForm } from "lib/validators/validateLoginForm";
 import InputForm from "./InputForm";
+import { setErrorMessage } from "src/features/Login/loginService";
 
 // Login Form
 const LoginForm = () => {
@@ -27,7 +29,13 @@ const LoginForm = () => {
           <InputForm title="Password" inputType="password" />
 
           <Button
-            onClick={async () => await submitForm(router, dispatch, formData)}
+            onClick={async () => {
+              if (await validateLoginForm(formData)) {
+                await submitForm(router, dispatch, formData);
+              } else {
+                dispatch(setErrorMessage({ message: "" }));
+              }
+            }}
             label="Sign In"
             icon="pi pi-user"
             className="w-full mb-3 p-ripple"

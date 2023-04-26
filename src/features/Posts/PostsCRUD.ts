@@ -8,7 +8,6 @@ const initialState: PostsCRUD = {
   postsInfo: {
     currentPage: 1,
     totalPosts: 0,
-    postsFound: 0,
     pageSize: 10,
     startIndex: 0,
     totalPages: 1,
@@ -27,9 +26,6 @@ const postsCRUDSlice = createSlice({
     },
     setTotalPosts: (state, action: PayloadAction<number>) => {
       state.postsInfo.totalPosts = action.payload;
-    },
-    setPostsFound: (state, action: PayloadAction<number>) => {
-      state.postsInfo.postsFound = action.payload;
     },
     setPageSize: (state, action: PayloadAction<number>) => {
       state.postsInfo.pageSize = action.payload;
@@ -56,7 +52,6 @@ export const {
   setCurrentPage,
   setPageSize,
   setPosts,
-  setPostsFound,
   setStartIndex,
   setQueryParams,
 } = postsCRUDSlice.actions;

@@ -12,12 +12,12 @@ import {
   setTotalPages,
   setPageSize,
   setCurrentPage,
-  setPostsFound,
   setStartIndex,
   setQueryParams,
 } from "src/features/Posts/PostsCRUD";
 import NativePaginator from "src/components/NativePaginator/NativePaginator";
 import Router from "next/router";
+import { validateFetchPosts } from "lib/validators/validateFetchPosts";
 
 export const PostsView = () => {
   const dispatch = useDispatch();
@@ -70,6 +70,7 @@ export const PostsView = () => {
     if (!queryParamsUpdated) {
       return;
     }
+
     const token = getToken();
     try {
       // Make API call to submit form data
@@ -78,14 +79,17 @@ export const PostsView = () => {
       // Handle response
       if (response.status === 200) {
         const result = await response.json();
+
+        if (!(await validateFetchPosts(result.data))) {
+          throw new Error("Invalid data fetched from server");
+        }
+
         // Get posts
         dispatch(setPosts(result.data.data));
         // Get total posts count
         dispatch(setTotalPosts(result.data.info.totalPosts));
         // Get total pages count
         dispatch(setTotalPages(result.data.info.totalPages));
-        // Get all found posts
-        dispatch(setPostsFound(result.data.info.postsFound));
         // Get start index
         dispatch(setStartIndex(result.data.info.startIndex));
         // Get page size
