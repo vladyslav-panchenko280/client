@@ -4,7 +4,7 @@ import type { PaginatorCurrentPageReportOptions } from "primereact/paginator";
 import React from "react";
 import { setCurrentPage } from "src/features/Posts/PostsCRUD";
 import { useState } from "react";
-import type { NativePaginatorProps } from "lib/types/NativePaginator";
+import type { NativePaginatorProps } from "lib/interfaces/NativePaginator";
 
 // Template for customizing the layout of the Paginator component
 const template = {

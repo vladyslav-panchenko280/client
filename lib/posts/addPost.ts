@@ -1,8 +1,9 @@
-import type { Post } from "lib/types/postValidator";
+import type { Post } from "lib/interfaces/postValidator";
+import type { Token } from "lib/interfaces/Token";
 import { POSTS_ENDPOINT } from "lib/constants/endpoints";
 
 // Add new post
-export const addPost = async (token: string, body: Post) => {
+export const addPost = async (token: Token, body: Post) => {
   return await fetch(POSTS_ENDPOINT, {
     method: "POST",
     mode: "cors",

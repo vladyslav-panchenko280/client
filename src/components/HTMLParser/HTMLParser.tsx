@@ -1,5 +1,8 @@
 import { useEffect, useRef, FC } from "react";
-import type { ContainerProps, HTMLParserProps } from "lib/types/HTMLParser";
+import type {
+  ContainerProps,
+  HTMLParserProps,
+} from "lib/interfaces/HTMLParser";
 
 const HTMLParser: FC<HTMLParserProps> = ({ data, className, tag = "div" }) => {
   const Container = tag;

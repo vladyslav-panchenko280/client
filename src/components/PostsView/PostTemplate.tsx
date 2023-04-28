@@ -1,51 +1,20 @@
 import { Tag } from "primereact/tag";
-import type { Post } from "lib/types/postValidator";
+import type { Post } from "lib/interfaces/postValidator";
 import { HTMLParser } from "src/components/HTMLParser/HTMLParser";
 import { Button } from "primereact/button";
 import { deletePost } from "lib/posts/deletePost";
 import { getToken } from "lib/utils/getToken";
-import ModalPost from "src/components/ModalPost/ModalPost";
-import { RootState } from "src/app/store";
-import { useSelector, shallowEqual, useDispatch } from "react-redux";
-import { updatePost } from "lib/posts/updatePost";
+import { useDispatch } from "react-redux";
 import {
-  setTitle,
-  setCreator,
-  setDcCreator,
-  setContentSnippet,
-  setContent,
-  setPubDate,
-  setIsoDate,
-  setLink,
-  setCategories,
-  setGuid,
-} from "src/features/Posts/PostValidator";
+  setPost,
+  setVisible,
+  setSubmitFunc,
+} from "src/features/Posts/ModalPost";
+import { updatePost } from "lib/posts/updatePost";
 
 // Template for customizing the layout of the PostsView component
 const PostTemplate = (post: Post) => {
   const dispatch = useDispatch();
-  const postState = useSelector(
-    (state: RootState) => state.postValidator,
-    shallowEqual
-  );
-
-  const sumbitFunc = async () => {
-    const token = getToken();
-    return await updatePost(token, postState.guid, postState);
-  };
-
-  const setCurrentPost = () => {
-    dispatch(setTitle(post.title));
-    dispatch(setCreator(post.creator));
-    dispatch(setDcCreator(post["dc:creator"]));
-    dispatch(setLink(post.link));
-    dispatch(setIsoDate(post.isoDate));
-    dispatch(setPubDate(post.pubDate));
-    dispatch(setCategories(post.categories));
-    dispatch(setContent(post.content));
-    dispatch(setContentSnippet(post.contentSnippet));
-    dispatch(setGuid(post.guid));
-  };
 
   return (
     <div className="col-12 my-4">
@@ -68,11 +37,15 @@ const PostTemplate = (post: Post) => {
                 </div>
               </div>
               <div className="flex gap-4">
-                <ModalPost
-                  data={post}
-                  triggerFunc={setCurrentPost}
-                  submitFunc={sumbitFunc}
+                <Button
+                  label=""
                   icon={"pi pi-pencil"}
+                  className="mr-2"
+                  onClick={async () => {
+                    dispatch(setPost(post));
+                    dispatch(setVisible(true));
+                    dispatch(setSubmitFunc(updatePost));
+                  }}
                 />
                 <Button
                   icon="pi pi-times"

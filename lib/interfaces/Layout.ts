@@ -1,5 +1,7 @@
 import { ReactNode } from "react";
 
+export type LayoutChildren = ReactNode;
+
 export interface LayoutInterface {
-  children: ReactNode;
+  children: LayoutChildren;
 }

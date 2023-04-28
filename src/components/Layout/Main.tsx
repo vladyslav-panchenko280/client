@@ -1,5 +1,5 @@
 import { FC } from "react";
-import type { MainInterface } from "lib/types/Main";
+import type { MainInterface } from "lib/interfaces/Main";
 
 // Standart main styling
 const Main: FC<MainInterface> = ({ children, className }) => {

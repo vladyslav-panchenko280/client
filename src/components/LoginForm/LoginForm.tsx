@@ -1,6 +1,6 @@
 import { Button } from "primereact/button";
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../../app/store";
+import { RootState } from "src/app/store";
 import { submitForm } from "pages/api/auth/submitForm";
 import { useRouter } from "next/router";
 import { validateLoginForm } from "lib/validators/validateLoginForm";

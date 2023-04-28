@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
-import type { FormState, ErrorData, FormData } from "lib/types/loginForm";
+import type { FormState, ErrorData, FormData } from "lib/interfaces/LoginForm";
 
 // Initial state for the state slice
 const initialState: FormState = {

@@ -1,5 +1,5 @@
 import { object, string } from "yup";
-import type { FormData } from "lib/types/loginForm";
+import type { FormData } from "lib/interfaces/LoginForm";
 
 export const loginFormSchema = object({
   username: string().required().max(100),

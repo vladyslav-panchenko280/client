@@ -2,7 +2,7 @@ import { InputText } from "primereact/inputtext";
 import { useDispatch, useSelector } from "react-redux";
 import type { RootState } from "src/app/store";
 import { FC } from "react";
-import { InputFormProps } from "lib/types/loginForm";
+import { InputFormProps } from "lib/interfaces/LoginForm";
 import { ChangeEvent } from "react";
 import { setFormData, setErrorMessage } from "src/features/Login/loginService";
 

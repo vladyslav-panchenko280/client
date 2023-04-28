@@ -1,6 +1,14 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
-import type { PostsView } from "lib/types/postsView";
+import type {
+  PostsView,
+  SelectedFilterKey,
+  SelectedFilterValue,
+  SelectedSortField,
+  SelectedSortKey,
+  SelectedSortOrder,
+  SortChangeValue,
+} from "lib/interfaces/postsView";
 
 // Initial state for the state slice
 const initialState: PostsView = {
@@ -32,22 +40,22 @@ const postViewSlice = createSlice({
   name: "postsView",
   initialState,
   reducers: {
-    setSortKey: (state, action: PayloadAction<string>) => {
+    setSortKey: (state, action: PayloadAction<SelectedSortKey>) => {
       state.selected.sortKey = action.payload;
     },
-    setSortOrder: (state, action: PayloadAction<1 | -1>) => {
+    setSortOrder: (state, action: PayloadAction<SelectedSortOrder>) => {
       state.selected.sortOrder = action.payload;
     },
-    setSortField: (state, action: PayloadAction<string>) => {
+    setSortField: (state, action: PayloadAction<SelectedSortField>) => {
       state.selected.sortField = action.payload;
     },
-    setFilterKey: (state, action: PayloadAction<string>) => {
+    setFilterKey: (state, action: PayloadAction<SelectedFilterKey>) => {
       state.selected.filterKey = action.payload;
     },
-    setFilterValue: (state, action: PayloadAction<string>) => {
+    setFilterValue: (state, action: PayloadAction<SelectedFilterValue>) => {
       state.selected.filterValue = action.payload;
     },
-    sortChange: (state, action: PayloadAction<string>) => {
+    sortChange: (state, action: PayloadAction<SortChangeValue>) => {
       const value = action.payload;
       if (value.indexOf("!") === 0) {
         state.selected.sortOrder = -1;

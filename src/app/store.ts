@@ -1,18 +1,18 @@
 import { configureStore } from "@reduxjs/toolkit";
 import loginFormReducer from "../features/Login/loginService";
-import type { FormState } from "lib/types/loginForm";
-import type { PostsView } from "lib/types/postsView";
-import type { PostsCRUD } from "lib/types/postsCRUD";
+import type { FormState } from "lib/interfaces/LoginForm";
+import type { PostsView } from "lib/interfaces/postsView";
+import type { PostsCRUD } from "lib/interfaces/postsCRUD";
 import PostsCRUDReducer from "src/features/Posts/PostsCRUD";
 import PostsViewReducer from "src/features/Posts/PostsView";
-import PostValidatorReducer from "src/features/Posts/PostValidator";
-import type { Post } from "lib/types/postValidator";
+import ModalPostReducer from "src/features/Posts/ModalPost";
+import type { ModalPostInterface } from "lib/interfaces/ModalPost";
 
 export interface RootState {
   loginForm: FormState;
   postsCRUD: PostsCRUD;
   postsView: PostsView;
-  postValidator: Post;
+  modalPost: ModalPostInterface;
 }
 
 // Configure the Redux store
@@ -21,7 +21,7 @@ const store = configureStore({
     loginForm: loginFormReducer, // Add the login form reducer to the store
     postsCRUD: PostsCRUDReducer, // Add posts crud reducer to the store
     postsView: PostsViewReducer, // Add posts view reducer to the store
-    postValidator: PostValidatorReducer, // Add post validator to the store
+    modalPost: ModalPostReducer, // Add  modal post to the store
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

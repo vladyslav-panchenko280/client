@@ -18,6 +18,7 @@ import {
 import NativePaginator from "src/components/NativePaginator/NativePaginator";
 import Router from "next/router";
 import { validateFetchPosts } from "lib/validators/validateFetchPosts";
+import ModalPost from "src/components/ModalPost/ModalPost";
 
 export const PostsView = () => {
   const dispatch = useDispatch();
@@ -114,6 +115,7 @@ export const PostsView = () => {
 
   return (
     <div className="card w-full">
+      <ModalPost></ModalPost>
       <DataView
         value={posts}
         itemTemplate={PostTemplate}

@@ -1,5 +1,5 @@
 import { object, string, array, number } from "yup";
-import type { FetchPostsInterface } from "lib/types/FetchPosts";
+import type { FetchPostsInterface } from "lib/interfaces/FetchPosts";
 
 export const fetchPostsSchema = object({
   data: array().of(

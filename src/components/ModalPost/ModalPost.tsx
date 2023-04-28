@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { InputTextarea } from "primereact/inputtextarea";
 import { Button } from "primereact/button";
 import { Dialog } from "primereact/dialog";
@@ -6,7 +6,7 @@ import { InputText } from "primereact/inputtext";
 import { Editor } from "primereact/editor";
 import { Calendar } from "primereact/calendar";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
-import { RootState } from "../../app/store";
+import { RootState } from "src/app/store";
 import {
   setTitle,
   setCreator,
@@ -15,60 +15,63 @@ import {
   setContent,
   setPubDate,
   setIsoDate,
+  modalClose,
   setLink,
   setCategories,
   setResetValues,
   setGuid,
-} from "src/features/Posts/PostValidator";
-import type { ModalInterface } from "lib/types/ModalPost";
+  setError,
+  setVisible,
+} from "src/features/Posts/ModalPost";
 import InputModal from "src/components/ModalPost/InputModal";
 import { validateModalPost } from "lib/validators/validateModalPost";
+import { getToken } from "lib/utils/getToken";
 
-const ModalPost: React.FC<ModalInterface> = ({
-  data,
-  submitFunc,
-  triggerFunc,
-  icon,
-  label,
-}) => {
-  const [visible, setVisible] = useState(false);
-  const [isError, setError] = useState("");
+const ModalPost: React.FC = () => {
   const dispatch = useDispatch();
   const postState = useSelector(
-    (state: RootState) => state.postValidator,
+    (state: RootState) => state.modalPost.inputs,
+    shallowEqual
+  );
+  const ModalError = useSelector(
+    (state: RootState) => state.modalPost.properties.error,
+    shallowEqual
+  );
+  const ModalVisible = useSelector(
+    (state: RootState) => state.modalPost.properties.isVisible,
     shallowEqual
   );
 
-  const closeHandle = () => {
-    dispatch(setResetValues());
-    setVisible(false);
-    setError("");
-  };
+  const submitFunc = useSelector(
+    (state: RootState) => state.modalPost.properties.submitFunc,
+    shallowEqual
+  );
 
-  const updatePostOptions = (
+  const ModalPostOptions = (
     <div>
       <Button
         label="No"
         icon="pi pi-times"
-        onClick={closeHandle}
+        onClick={() => dispatch(modalClose())}
         className="p-button-text"
       />
       <Button
         label="Yes"
         icon="pi pi-check"
         onClick={async () => {
-          const response = await submitFunc();
+          const token = getToken();
+          const response = await submitFunc(token, postState, postState.guid);
           const result = await response.json();
 
           if (!(await validateModalPost(result))) {
-            setError("Invalid form data");
+            dispatch(setError("Invalid form data"));
             return;
           }
 
           if (!response.ok) {
-            setError(result.message);
+            dispatch(setError(result.message));
           } else {
-            closeHandle();
+            dispatch(modalClose());
           }
         }}
       />
@@ -77,24 +80,15 @@ const ModalPost: React.FC<ModalInterface> = ({
 
   return (
     <div className="card flex justify-content-center">
-      <Button
-        label={label && label}
-        icon={icon}
-        className="mr-2"
-        onClick={() => {
-          setVisible(true);
-          triggerFunc && triggerFunc(data);
-        }}
-      />
       <Dialog
         header="Header"
-        visible={visible}
-        style={{ width: "50vw", borderColor: isError ? "red" : "" }}
+        visible={ModalVisible}
+        style={{ width: "50vw", borderColor: ModalError ? "red" : "" }}
         onHide={() => {
-          setVisible(false);
+          dispatch(setVisible(false));
           dispatch(setResetValues());
         }}
-        footer={updatePostOptions}
+        footer={ModalPostOptions}
       >
         <InputModal title={"Title of the post"} metaTitle="title">
           <InputText
@@ -179,9 +173,9 @@ const ModalPost: React.FC<ModalInterface> = ({
             onChange={(e: any) => dispatch(setGuid(e.target.value))}
           />
         </InputModal>
-        {isError && (
+        {ModalError && (
           <div>
-            <p style={{ color: "red" }}>{isError}</p>
+            <p style={{ color: "red" }}>{ModalError}</p>
           </div>
         )}
       </Dialog>

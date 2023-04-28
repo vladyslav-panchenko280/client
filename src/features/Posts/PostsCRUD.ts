@@ -1,7 +1,15 @@
 import { createSlice } from "@reduxjs/toolkit";
-import type { Post } from "lib/types/postValidator";
 import type { PayloadAction } from "@reduxjs/toolkit";
-import type { PostsCRUD } from "lib/types/postsCRUD";
+import type {
+  PostsArray,
+  PostsCRUD,
+  PostsCurrentPage,
+  PostsPageSize,
+  PostsQueryParams,
+  PostsStartIndex,
+  PostsTotalPages,
+  PostsTotalPosts,
+} from "lib/interfaces/postsCRUD";
 
 // Initial state for the state slice
 const initialState: PostsCRUD = {
@@ -21,25 +29,25 @@ const postsCRUDSlice = createSlice({
   name: "postsCRUD",
   initialState,
   reducers: {
-    setCurrentPage: (state, action: PayloadAction<number>) => {
+    setCurrentPage: (state, action: PayloadAction<PostsCurrentPage>) => {
       state.postsInfo.currentPage = action.payload;
     },
-    setTotalPosts: (state, action: PayloadAction<number>) => {
+    setTotalPosts: (state, action: PayloadAction<PostsTotalPosts>) => {
       state.postsInfo.totalPosts = action.payload;
     },
-    setPageSize: (state, action: PayloadAction<number>) => {
+    setPageSize: (state, action: PayloadAction<PostsPageSize>) => {
       state.postsInfo.pageSize = action.payload;
     },
-    setStartIndex: (state, action: PayloadAction<number>) => {
+    setStartIndex: (state, action: PayloadAction<PostsStartIndex>) => {
       state.postsInfo.currentPage = action.payload;
     },
-    setTotalPages: (state, action: PayloadAction<number>) => {
+    setTotalPages: (state, action: PayloadAction<PostsTotalPages>) => {
       state.postsInfo.currentPage = action.payload;
     },
-    setPosts: (state, action: PayloadAction<Post[]>) => {
+    setPosts: (state, action: PayloadAction<PostsArray>) => {
       state.postsData = action.payload;
     },
-    setQueryParams: (state, action: PayloadAction<string>) => {
+    setQueryParams: (state, action: PayloadAction<PostsQueryParams>) => {
       state.queryParams = action.payload;
     },
   },

@@ -1,4 +1,4 @@
-import { FormData } from "lib/types/loginForm";
+import { FormData } from "lib/interfaces/LoginForm";
 import { AUTH_ENDPOINT } from "lib/constants/endpoints";
 
 // Standart login form

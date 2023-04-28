@@ -1,6 +1,8 @@
 import { ReactNode } from "react";
 
+export type MainChildren = ReactNode;
+
 export interface MainInterface {
-  children: ReactNode;
+  children: MainChildren;
   className?: string;
 }
