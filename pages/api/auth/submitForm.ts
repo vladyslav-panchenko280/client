@@ -1,4 +1,4 @@
-import type { FormData } from "lib/types/loginForm";
+import type { FormData } from "lib/interfaces/LoginForm";
 import { login } from "lib/auth/login";
 import { setErrorMessage } from "src/features/Login/loginService";
 import type { Dispatch, AnyAction } from "@reduxjs/toolkit";
