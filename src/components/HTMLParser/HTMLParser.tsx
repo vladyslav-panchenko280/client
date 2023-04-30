@@ -2,13 +2,19 @@ import { useEffect, useRef, FC } from "react";
 import type {
   ContainerProps,
   HTMLParserProps,
+  SelectInnerHTML,
 } from "lib/interfaces/HTMLParser";
 
 const HTMLParser: FC<HTMLParserProps> = ({ data, className, tag = "div" }) => {
   const Container = tag;
   const aRef = useRef<HTMLElement>(null);
+  const selectInnerHTML: SelectInnerHTML = (ref, data) => {
+    if (ref.current) {
+      ref.current.innerHTML = data;
+    }
+  };
   useEffect(() => {
-    if (aRef.current) aRef.current.innerHTML = data;
+    selectInnerHTML(aRef, data);
   }, [data]);
   //@ts-ignore
   const containerProps: ContainerProps = {

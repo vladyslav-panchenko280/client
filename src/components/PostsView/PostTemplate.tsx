@@ -16,6 +16,17 @@ import { updatePost } from "lib/posts/updatePost";
 const PostTemplate = (post: Post) => {
   const dispatch = useDispatch();
 
+  const handleRemoveButton = async () => {
+    const token = getToken();
+    await deletePost(token, post.guid);
+  };
+
+  const handleEditButton = async () => {
+    dispatch(setPost(post));
+    dispatch(setVisible(true));
+    dispatch(setSubmitFunc(updatePost));
+  };
+
   return (
     <div className="col-12 my-4">
       <div className="flex flex-column xl:flex-row xl:align-items-start p-4 gap-4">
@@ -41,19 +52,12 @@ const PostTemplate = (post: Post) => {
                   label=""
                   icon={"pi pi-pencil"}
                   className="mr-2"
-                  onClick={async () => {
-                    dispatch(setPost(post));
-                    dispatch(setVisible(true));
-                    dispatch(setSubmitFunc(updatePost));
-                  }}
+                  onClick={handleEditButton}
                 />
                 <Button
                   icon="pi pi-times"
                   className="p-button-danger"
-                  onClick={async () => {
-                    const token = getToken();
-                    await deletePost(token, post.guid);
-                  }}
+                  onClick={handleRemoveButton}
                 />
               </div>
             </div>

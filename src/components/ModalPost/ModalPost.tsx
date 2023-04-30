@@ -26,6 +26,11 @@ import {
 import InputModal from "src/components/ModalPost/InputModal";
 import { validateModalPost } from "lib/validators/validateModalPost";
 import { getToken } from "lib/utils/getToken";
+import type {
+  HandleCalendarChange,
+  HandleHideModal,
+  SubmitModalPost,
+} from "lib/interfaces/ModalPost";
 
 const ModalPost: React.FC = () => {
   const dispatch = useDispatch();
@@ -47,6 +52,32 @@ const ModalPost: React.FC = () => {
     shallowEqual
   );
 
+  const submitModalPost: SubmitModalPost = async () => {
+    const token = getToken();
+    const response = await submitFunc(token, postState, postState.guid);
+    const result = await response.json();
+    if (!(await validateModalPost(result))) {
+      dispatch(setError("Invalid form data"));
+      return;
+    }
+    if (!response.ok) {
+      dispatch(setError(result.message));
+    } else {
+      dispatch(modalClose());
+    }
+  };
+
+  const handleHideModal: HandleHideModal = () => {
+    dispatch(setVisible(false));
+    dispatch(setResetValues());
+  };
+
+  const handleCalendarChange: HandleCalendarChange = (value) => {
+    const date = new Date(value);
+    dispatch(setPubDate(date.toString()));
+    dispatch(setIsoDate(date.toISOString()));
+  };
+
   const ModalPostOptions = (
     <div>
       <Button
@@ -55,26 +86,7 @@ const ModalPost: React.FC = () => {
         onClick={() => dispatch(modalClose())}
         className="p-button-text"
       />
-      <Button
-        label="Yes"
-        icon="pi pi-check"
-        onClick={async () => {
-          const token = getToken();
-          const response = await submitFunc(token, postState, postState.guid);
-          const result = await response.json();
-
-          if (!(await validateModalPost(result))) {
-            dispatch(setError("Invalid form data"));
-            return;
-          }
-
-          if (!response.ok) {
-            dispatch(setError(result.message));
-          } else {
-            dispatch(modalClose());
-          }
-        }}
-      />
+      <Button label="Yes" icon="pi pi-check" onClick={submitModalPost} />
     </div>
   );
 
@@ -84,10 +96,7 @@ const ModalPost: React.FC = () => {
         header="Header"
         visible={ModalVisible}
         style={{ width: "50vw", borderColor: ModalError ? "red" : "" }}
-        onHide={() => {
-          dispatch(setVisible(false));
-          dispatch(setResetValues());
-        }}
+        onHide={handleHideModal}
         footer={ModalPostOptions}
       >
         <InputModal title={"Title of the post"} metaTitle="title">
@@ -142,11 +151,7 @@ const ModalPost: React.FC = () => {
             aria-describedby="pubDate-help"
             dateFormat="D, d M yy"
             hourFormat="24"
-            onChange={(e: any) => {
-              const date = new Date(e.value);
-              dispatch(setPubDate(date.toString()));
-              dispatch(setIsoDate(date.toISOString()));
-            }}
+            onChange={(e: any) => handleCalendarChange(e.value)}
           />
         </InputModal>
         <InputModal title="Link" metaTitle="link">

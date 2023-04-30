@@ -115,7 +115,7 @@ export const PostsView = () => {
 
   return (
     <div className="card w-full">
-      <ModalPost></ModalPost>
+      <ModalPost />
       <DataView
         value={posts}
         itemTemplate={PostTemplate}

@@ -2,8 +2,7 @@ import { InputText } from "primereact/inputtext";
 import { useDispatch, useSelector } from "react-redux";
 import type { RootState } from "src/app/store";
 import { FC } from "react";
-import { InputFormProps } from "lib/interfaces/LoginForm";
-import { ChangeEvent } from "react";
+import { InputFormProps, HandleInputChange } from "lib/interfaces/LoginForm";
 import { setFormData, setErrorMessage } from "src/features/Login/loginService";
 
 const InputForm: FC<InputFormProps> = ({ title, inputType }) => {
@@ -14,7 +13,7 @@ const InputForm: FC<InputFormProps> = ({ title, inputType }) => {
   );
 
   // Handle input changing while user typing
-  const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange: HandleInputChange = (event) => {
     const { id, value } = event.target;
 
     // Dynamically change form data

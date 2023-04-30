@@ -11,6 +11,7 @@ import { InputText } from "primereact/inputtext";
 import { Button } from "primereact/button";
 import { addPost } from "lib/posts/addPost";
 import { setVisible, setSubmitFunc } from "src/features/Posts/ModalPost";
+import type { HandleAddButton } from "lib/interfaces/postsView";
 
 const PostsViewHeader = () => {
   const dispatch = useDispatch();
@@ -29,6 +30,11 @@ const PostsViewHeader = () => {
     (state: RootState) => state.postsView.filterOptions
   );
 
+  const handleAddButton: HandleAddButton = () => {
+    dispatch(setVisible(true));
+    dispatch(setSubmitFunc(addPost));
+  };
+
   const inputRef = useRef<HTMLInputElement>(null);
   return (
     <div className="flex flex-column justify-content-between xl:flex-row">
@@ -45,10 +51,7 @@ const PostsViewHeader = () => {
           label={"New post"}
           icon={"pi pi-plus"}
           className="mr-2"
-          onClick={() => {
-            dispatch(setVisible(true));
-            dispatch(setSubmitFunc(addPost));
-          }}
+          onClick={handleAddButton}
         />
       </div>
       <div className="p-inputgroup flex min-w-0 w-auto">

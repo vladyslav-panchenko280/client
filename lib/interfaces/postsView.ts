@@ -8,6 +8,9 @@ export type SelectedSortField = string;
 export type SelectedFilterKey = string;
 export type SelectedFilterValue = string;
 export type SortChangeValue = string;
+export type HandleAddButton = () => void;
+export type HandleRemoveButton = () => Promise<void>;
+export type HandleEditButton = () => Promise<void>;
 
 export interface SortOption {
   label: SortOptionLabel;

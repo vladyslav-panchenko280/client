@@ -8,6 +8,9 @@ export type submitFuncPut = (
   body: Post,
   id: PostGuid
 ) => Promise<Response>;
+export type SubmitModalPost = () => Promise<void>;
+export type HandleHideModal = () => void;
+export type HandleCalendarChange = (e: any) => void;
 export type ModalPostError = string;
 export type ModalPostVisible = boolean;
 export type InputModalChildren = ReactNode;

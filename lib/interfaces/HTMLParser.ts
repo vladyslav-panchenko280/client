@@ -1,7 +1,12 @@
-import { RefObject } from "react";
+import type { RefObject } from "react";
 
 export type HTMLParserData = string;
+export type RefObjectHTML = RefObject<HTMLElement>;
 export type HTMLParserTag = string;
+export type SelectInnerHTML = (
+  ref: RefObjectHTML,
+  data: HTMLParserData
+) => void;
 
 export interface HTMLParserProps {
   data: HTMLParserData;
@@ -9,6 +14,6 @@ export interface HTMLParserProps {
   tag: HTMLParserTag;
 }
 export interface ContainerProps {
-  ref: RefObject<HTMLElement>;
+  ref: RefObjectHTML;
   className: string;
 }

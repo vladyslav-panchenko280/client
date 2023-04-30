@@ -4,7 +4,10 @@ import type { PaginatorCurrentPageReportOptions } from "primereact/paginator";
 import React from "react";
 import { setCurrentPage } from "src/features/Posts/PostsCRUD";
 import { useState } from "react";
-import type { NativePaginatorProps } from "lib/interfaces/NativePaginator";
+import type {
+  HandlePageChange,
+  NativePaginatorProps,
+} from "lib/interfaces/NativePaginator";
 
 // Template for customizing the layout of the Paginator component
 const template = {
@@ -33,17 +36,18 @@ const NativePaginator: React.FC<NativePaginatorProps> = ({
 }) => {
   const dispatch = useDispatch();
   const [first, setFirst] = useState(startIndex);
+  const handlePageChange: HandlePageChange = (e) => {
+    dispatch(setCurrentPage(e.page + 1));
+    setFirst(e.first);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
   return (
     <Paginator
       template={template}
       first={first}
       rows={pageSize}
       totalRecords={totalPosts}
-      onPageChange={(e) => {
-        dispatch(setCurrentPage(e.page + 1));
-        setFirst(e.first);
-        window.scrollTo({ top: 0, behavior: "smooth" });
-      }}
+      onPageChange={(e) => handlePageChange(e)}
       className={className}
     />
   );
