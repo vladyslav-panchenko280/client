@@ -1,5 +1,5 @@
 import { object, string, array } from "yup";
-import { Post } from "lib/interfaces/postValidator";
+import type { Post } from "lib/interfaces/postValidator";
 
 export const modalPostSchema = object({
   creator: string().required().max(100),

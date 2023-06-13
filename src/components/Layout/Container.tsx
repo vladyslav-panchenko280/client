@@ -1,4 +1,4 @@
-import { FC } from "react";
+import type { FC } from "react";
 import type { ContainerInterface } from "lib/interfaces/Container";
 
 // Container which provide 8/10 width for item

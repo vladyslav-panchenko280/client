@@ -11,6 +11,9 @@ import {
   setSubmitFunc,
 } from "src/features/Posts/ModalPost";
 import { updatePost } from "lib/posts/updatePost";
+import { toggleFlag } from "src/features/Posts/PostsCRUD";
+import { validateToken } from "lib/validators/validateToken";
+import { navigateToLogin } from "lib/utils/navigateToLogin";
 
 // Template for customizing the layout of the PostsView component
 const PostTemplate = (post: Post) => {
@@ -18,7 +21,11 @@ const PostTemplate = (post: Post) => {
 
   const handleRemoveButton = async () => {
     const token = getToken();
+    if (!(await validateToken(token))) {
+      navigateToLogin();
+    }
     await deletePost(token, post.guid);
+    dispatch(toggleFlag(true));
   };
 
   const handleEditButton = async () => {
@@ -30,7 +37,7 @@ const PostTemplate = (post: Post) => {
   return (
     <div className="col-12 my-4">
       <div className="flex flex-column xl:flex-row xl:align-items-start p-4 gap-4">
-        <div className="flex flex-column justify-content-between align-items-center xl:align-items-start flex-1 gap-4 w-full">
+        <div className="flex flex-column gap-4 justify-content-between align-items-center xl:align-items-start flex-1 gap-4 w-full">
           <div className="flex flex-column w-full align-items-between sm:align-items-start gap-3 max-w-full">
             <div className="flex gap-8 w-full md:flex-row flex-column justify-content-between">
               <div className="w-full flex gap-8 w-full">
@@ -40,7 +47,7 @@ const PostTemplate = (post: Post) => {
                   <span className="text-3xl font-bold">{post.creator}</span>
                 </div>
                 <div className="text-xl font-medium text-900">
-                  <span>dc:creator: </span>
+                  <span>Document creator: </span>
                   <br />
                   <span className="text-3xl font-bold">
                     {post["dc:creator"]}
@@ -57,7 +64,13 @@ const PostTemplate = (post: Post) => {
                 <Button
                   icon="pi pi-times"
                   className="p-button-danger"
-                  onClick={handleRemoveButton}
+                  onDoubleClick={handleRemoveButton}
+                  tooltip="Click twice to remove post"
+                  tooltipOptions={{
+                    position: "top",
+                    mouseTrack: true,
+                    mouseTrackTop: 10,
+                  }}
                 />
               </div>
             </div>
@@ -68,7 +81,7 @@ const PostTemplate = (post: Post) => {
             </div>
           </div>
 
-          <div className="flex w-full flex-column align-items-center gap-3">
+          <div className="flex w-full flex-column align-items-start gap-3">
             <div>
               <span className="text-xl font-medium text-900">Snippet: </span>
               <br />
@@ -79,16 +92,11 @@ const PostTemplate = (post: Post) => {
             <div className="text-xl font-medium text-900">
               <span>Content: </span>
               <br />
-              <span
-                style={{ wordBreak: "break-all" }}
-                className="w-full white-space-normal"
-              >
-                <HTMLParser
-                  className="flex flex-column min-w-0 max-w-full"
-                  tag={"div"}
-                  data={post.content}
-                />
-              </span>
+              <HTMLParser
+                className="flex flex-column h-max min-w-0 max-w-full"
+                tag={"div"}
+                data={post.content}
+              />
             </div>
           </div>
 
@@ -104,7 +112,7 @@ const PostTemplate = (post: Post) => {
               </span>
             </span>
           </div>
-          <div className="text-xl font-medium text-900">
+          <div className="text-xl font-medium text-900 align-self-start">
             <span>Categories: </span>
             <br />
             {post.categories.map((element, index) => {

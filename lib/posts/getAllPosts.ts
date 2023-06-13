@@ -13,5 +13,5 @@ export const getAllPosts = async (token: Token, query?: PostsQueryParams) => {
       "Content-Type": "application/json",
       "x-access-token": token,
     },
-  });
+  }).catch((error) => error);
 };

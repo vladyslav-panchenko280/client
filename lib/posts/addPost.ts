@@ -13,5 +13,5 @@ export const addPost = async (token: Token, body: Post) => {
       "Content-Type": "application/json",
       "x-access-token": token,
     },
-  });
+  }).catch((error) => error);
 };

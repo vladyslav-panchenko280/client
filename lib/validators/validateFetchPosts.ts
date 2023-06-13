@@ -1,5 +1,6 @@
 import { object, string, array, number } from "yup";
 import type { FetchPostsInterface } from "lib/interfaces/FetchPosts";
+import { Post } from "lib/interfaces/postValidator";
 
 export const fetchPostsSchema = object({
   data: array().of(
@@ -12,7 +13,7 @@ export const fetchPostsSchema = object({
       content: string().required(),
       contentSnippet: string().required(),
       guid: string().required().length(10),
-      categories: array().of(string()).max(50),
+      categories: array().of(string()).max(300),
       isoDate: string().required().max(100),
     })
   ),
@@ -25,6 +26,25 @@ export const fetchPostsSchema = object({
   }),
 });
 
+export const postsSchema = array().of(
+  object({
+    creator: string().required().max(100),
+    title: string().required().max(180),
+    link: string().required().max(300),
+    pubDate: string().required().max(100),
+    "dc:creator": string().required().max(100),
+    content: string().required(),
+    contentSnippet: string().required(),
+    guid: string().required().length(10),
+    categories: array().of(string()).max(300),
+    isoDate: string().required().max(100),
+  })
+);
+
 export const validateFetchPosts = async (data: FetchPostsInterface) => {
   return fetchPostsSchema.isValid(data);
+};
+
+export const validatePosts = (data: Post[]) => {
+  return postsSchema.isValidSync(data);
 };

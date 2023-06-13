@@ -1,7 +1,7 @@
 import { Paginator } from "primereact/paginator";
 import { useDispatch } from "react-redux";
 import type { PaginatorCurrentPageReportOptions } from "primereact/paginator";
-import React from "react";
+import { FC } from "react";
 import { setCurrentPage } from "src/features/Posts/PostsCRUD";
 import { useState } from "react";
 import type {
@@ -28,7 +28,7 @@ const template = {
   },
 };
 
-const NativePaginator: React.FC<NativePaginatorProps> = ({
+const NativePaginator: FC<NativePaginatorProps> = ({
   startIndex,
   pageSize,
   totalPosts,

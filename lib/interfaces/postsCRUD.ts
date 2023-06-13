@@ -7,6 +7,7 @@ export type PostsStartIndex = number;
 export type PostsTotalPages = number;
 export type PostsQueryParams = string;
 export type PostsArray = Post[];
+export type ChangeFlag = boolean;
 
 export interface PostsInfo {
   currentPage: PostsCurrentPage;
@@ -20,4 +21,5 @@ export interface PostsCRUD {
   postsInfo: PostsInfo;
   postsData: PostsArray;
   queryParams: PostsQueryParams;
+  changeFlag: ChangeFlag;
 }

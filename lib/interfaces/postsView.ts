@@ -1,3 +1,6 @@
+import type { Dispatch } from "@reduxjs/toolkit";
+import { PostsCurrentPage, PostsStartIndex } from "lib/interfaces/postsCRUD";
+
 export type SortOptionLabel = string;
 export type SortOptionValue = string;
 export type FilterOptionName = string;
@@ -11,6 +14,19 @@ export type SortChangeValue = string;
 export type HandleAddButton = () => void;
 export type HandleRemoveButton = () => Promise<void>;
 export type HandleEditButton = () => Promise<void>;
+export type RenderPosts = (
+  changeFlag: boolean,
+  queryParams: string,
+  dispatch: Dispatch
+) => Promise<void>;
+export type BuildURI = (
+  dispatch: Dispatch,
+  currentPage: PostsCurrentPage,
+  sortField: SelectedSortField,
+  sortOrder: SelectedSortOrder,
+  filterKey: SelectedFilterKey,
+  filterValue: SelectedFilterValue
+) => void;
 
 export interface SortOption {
   label: SortOptionLabel;

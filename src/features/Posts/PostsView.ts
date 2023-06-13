@@ -17,8 +17,8 @@ const initialState: PostsView = {
     { label: "Date older to newest", value: "isoDate" },
     { label: "Creator name from A to Z", value: "creator" },
     { label: "Creator name from Z to A", value: "!creator" },
-    { label: "title from A to Z", value: "title" },
-    { label: "title from Z to A", value: "!title" },
+    { label: "Title from A to Z", value: "title" },
+    { label: "Title from Z to A", value: "!title" },
   ],
   filterOptions: [
     { name: "Date", value: "pubDate" },

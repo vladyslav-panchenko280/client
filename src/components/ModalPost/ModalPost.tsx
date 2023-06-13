@@ -1,4 +1,4 @@
-import React from "react";
+import type { FC } from "react";
 import { InputTextarea } from "primereact/inputtextarea";
 import { Button } from "primereact/button";
 import { Dialog } from "primereact/dialog";
@@ -15,7 +15,6 @@ import {
   setContent,
   setPubDate,
   setIsoDate,
-  modalClose,
   setLink,
   setCategories,
   setResetValues,
@@ -31,8 +30,16 @@ import type {
   HandleHideModal,
   SubmitModalPost,
 } from "lib/interfaces/ModalPost";
+import { validateModalCategories } from "lib/validators/validateModalCategories";
+import { validateModalDate } from "lib/validators/validateModalDate";
+import { validateModalInput } from "lib/validators/validateModalInput";
+import { toggleFlag } from "src/features/Posts/PostsCRUD";
+import { validateToken } from "lib/validators/validateToken";
+import { navigateToLogin } from "lib/utils/navigateToLogin";
+import ErrorMessage from "src/components/ErrorMessage/ErrorMessage";
+import { sanitizeDate } from "lib/utils/sanitizeDate";
 
-const ModalPost: React.FC = () => {
+const ModalPost: FC = () => {
   const dispatch = useDispatch();
   const postState = useSelector(
     (state: RootState) => state.modalPost.inputs,
@@ -53,40 +60,56 @@ const ModalPost: React.FC = () => {
   );
 
   const submitModalPost: SubmitModalPost = async () => {
-    const token = getToken();
-    const response = await submitFunc(token, postState, postState.guid);
-    const result = await response.json();
-    if (!(await validateModalPost(result))) {
-      dispatch(setError("Invalid form data"));
+    if (!(await validateModalPost(postState))) {
+      dispatch(
+        setError(
+          "Invalid post structure for inserting. All inputs should be filled"
+        )
+      );
       return;
     }
+    const token = getToken();
+    if (!(await validateToken(token))) {
+      navigateToLogin();
+    }
+    const response = await submitFunc(token, postState, postState.guid);
+    const result = await response.json();
     if (!response.ok) {
       dispatch(setError(result.message));
     } else {
-      dispatch(modalClose());
+      dispatch(toggleFlag(true));
+      handleHideModal();
     }
   };
 
   const handleHideModal: HandleHideModal = () => {
-    dispatch(setVisible(false));
     dispatch(setResetValues());
+    dispatch(setError(""));
+    dispatch(setVisible(false));
   };
 
   const handleCalendarChange: HandleCalendarChange = (value) => {
     const date = new Date(value);
-    dispatch(setPubDate(date.toString()));
+    dispatch(setPubDate(sanitizeDate(date.toUTCString())));
     dispatch(setIsoDate(date.toISOString()));
   };
 
   const ModalPostOptions = (
-    <div>
-      <Button
-        label="No"
-        icon="pi pi-times"
-        onClick={() => dispatch(modalClose())}
-        className="p-button-text"
+    <div className="flex justify-content-end m-4">
+      <ErrorMessage
+        className="align-self-start"
+        error={ModalError}
+        errorText={ModalError}
       />
-      <Button label="Yes" icon="pi pi-check" onClick={submitModalPost} />
+      <div>
+        <Button
+          label="No"
+          icon="pi pi-times"
+          onClick={handleHideModal}
+          className="p-button-text"
+        />
+        <Button label="Yes" icon="pi pi-check" onClick={submitModalPost} />
+      </div>
     </div>
   );
 
@@ -101,7 +124,7 @@ const ModalPost: React.FC = () => {
       >
         <InputModal title={"Title of the post"} metaTitle="title">
           <InputText
-            value={postState.title}
+            value={validateModalInput(postState.title)}
             id="title"
             onChange={(e: any) => dispatch(setTitle(e.target.value))}
             aria-describedby="title-help"
@@ -110,14 +133,14 @@ const ModalPost: React.FC = () => {
         <InputModal title={"Creator's name"} metaTitle="creator">
           <InputText
             id="creator"
-            value={postState.creator}
+            value={validateModalInput(postState.creator)}
             aria-describedby="creator-help"
             onChange={(e: any) => dispatch(setCreator(e.target.value))}
           />
         </InputModal>
         <InputModal title="Document creator's name" metaTitle="dc:creator">
           <InputText
-            value={postState["dc:creator"]}
+            value={validateModalInput(postState["dc:creator"])}
             id="dc:creator"
             aria-describedby="dc:cretor-help"
             onChange={(e: any) => dispatch(setDcCreator(e.target.value))}
@@ -126,7 +149,7 @@ const ModalPost: React.FC = () => {
         <InputModal title="Content snippet" metaTitle="snippet">
           <InputTextarea
             id="snippet"
-            value={postState.contentSnippet}
+            value={validateModalInput(postState.contentSnippet)}
             aria-describedby="snippet-help"
             rows={5}
             cols={30}
@@ -136,7 +159,7 @@ const ModalPost: React.FC = () => {
         <InputModal title="Content" metaTitle="content">
           <Editor
             id="content"
-            value={postState.content}
+            value={validateModalInput(postState.content)}
             onTextChange={(e: any) => dispatch(setContent(e.htmlValue))}
             aria-describedby="content-help"
             style={{ height: "320px" }}
@@ -147,7 +170,7 @@ const ModalPost: React.FC = () => {
             className="flex"
             showTime
             id="pubDate"
-            value={new Date(postState.pubDate)}
+            value={validateModalDate(postState.pubDate)}
             aria-describedby="pubDate-help"
             dateFormat="D, d M yy"
             hourFormat="24"
@@ -165,24 +188,21 @@ const ModalPost: React.FC = () => {
         <InputModal title="Categories" metaTitle="categories">
           <InputText
             id="categories"
-            value={postState.categories.join(",")}
+            value={validateModalCategories(postState.categories)}
             aria-describedby="categories-help"
-            onChange={(e: any) => dispatch(setCategories(e.target.value))}
+            onChange={(e: any) =>
+              dispatch(setCategories(e.target.value.split(",")))
+            }
           />
         </InputModal>
         <InputModal title="Globally Unique Identifier" metaTitle="guid">
           <InputText
             id="guid"
-            value={postState.guid}
+            value={validateModalInput(postState.guid)}
             aria-describedby="guid-help"
             onChange={(e: any) => dispatch(setGuid(e.target.value))}
           />
         </InputModal>
-        {ModalError && (
-          <div>
-            <p style={{ color: "red" }}>{ModalError}</p>
-          </div>
-        )}
       </Dialog>
     </div>
   );

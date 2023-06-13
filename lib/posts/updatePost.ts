@@ -11,5 +11,5 @@ export const updatePost = async (token: Token, post: Post, id: PostGuid) => {
       "Content-Type": "application/json",
       "x-access-token": token,
     },
-  });
+  }).catch((error) => error);
 };

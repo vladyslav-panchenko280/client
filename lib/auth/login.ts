@@ -14,5 +14,5 @@ export const login = async ({ username, password }: FormData) => {
       username: username,
       password: password,
     }),
-  });
+  }).catch((error) => error);
 };

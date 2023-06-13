@@ -1,29 +1,23 @@
-import React, { useEffect, useCallback, useState } from "react";
+import { useEffect, useCallback } from "react";
+import type { FC } from "react";
 import { DataView } from "primereact/dataview";
-import { getAllPosts } from "lib/posts/getAllPosts";
 import { useDispatch, useSelector } from "react-redux";
-import { getToken } from "lib/utils/getToken";
 import { RootState } from "src/app/store";
 import { PostsViewHeader } from "src/components/PostsView/PostsViewHeader";
 import { PostTemplate } from "src/components/PostsView/PostTemplate";
-import {
-  setPosts,
-  setTotalPosts,
-  setTotalPages,
-  setPageSize,
-  setCurrentPage,
-  setStartIndex,
-  setQueryParams,
-} from "src/features/Posts/PostsCRUD";
+import { renderPosts } from "pages/api/posts/renderPosts";
 import NativePaginator from "src/components/NativePaginator/NativePaginator";
-import Router from "next/router";
-import { validateFetchPosts } from "lib/validators/validateFetchPosts";
 import ModalPost from "src/components/ModalPost/ModalPost";
+import { buildURI } from "pages/api/posts/buildURI";
+import { SkeletonTemplate } from "./SkeletonTemplate";
+import { postsSkeletonTemplateData } from "lib/constants/templates";
 
-export const PostsView = () => {
+export const PostsView: FC = () => {
   const dispatch = useDispatch();
 
-  const [queryParamsUpdated, setQueryParamsUpdated] = useState(false);
+  const changeFlag = useSelector(
+    (state: RootState) => state.postsCRUD.changeFlag
+  );
 
   const sortField = useSelector(
     (state: RootState) => state.postsView.selected.sortField
@@ -57,68 +51,56 @@ export const PostsView = () => {
   );
 
   const queryParamsInURL = useCallback(() => {
-    dispatch(
-      setQueryParams(
-        `?page=${currentPage}&sortBy=${sortField}&sortOrder=${sortOrder}&filterBy=${filterKey}&filterValue=${encodeURIComponent(
-          filterValue
-        )}`
-      )
+    buildURI(
+      dispatch,
+      currentPage,
+      sortField,
+      sortOrder,
+      filterKey,
+      filterValue
     );
-    setQueryParamsUpdated(true);
-  }, [sortField, sortOrder, currentPage, filterValue, filterKey, startIndex]);
+  }, [
+    dispatch,
+    currentPage,
+    sortField,
+    sortOrder,
+    filterKey,
+    filterValue,
+    startIndex,
+  ]);
 
-  const renderPage = useCallback(async () => {
-    if (!queryParamsUpdated) {
-      return;
-    }
-
-    const token = getToken();
-    try {
-      // Make API call to submit form data
-      const response = await getAllPosts(token, queryParams);
-
-      // Handle response
-      if (response.status === 200) {
-        const result = await response.json();
-
-        if (!(await validateFetchPosts(result.data))) {
-          throw new Error("Invalid data fetched from server");
-        }
-
-        // Get posts
-        dispatch(setPosts(result.data.data));
-        // Get total posts count
-        dispatch(setTotalPosts(result.data.info.totalPosts));
-        // Get total pages count
-        dispatch(setTotalPages(result.data.info.totalPages));
-        // Get start index
-        dispatch(setStartIndex(result.data.info.startIndex));
-        // Get page size
-        dispatch(setPageSize(result.data.info.pageSize));
-        // Get current page
-        dispatch(setCurrentPage(result.data.info.currentPage));
-      } else {
-        Router.push("/login");
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  }, [queryParamsUpdated, queryParams, dispatch]);
+  const renderPostsCallback = useCallback(() => {
+    renderPosts(changeFlag, queryParams, dispatch);
+  }, [changeFlag, queryParams, dispatch]);
 
   useEffect(() => {
     queryParamsInURL();
   }, [queryParamsInURL]);
 
   useEffect(() => {
-    renderPage();
-  }, [renderPage]);
+    renderPostsCallback();
+  }, [renderPostsCallback]);
+
+  const validateLoadingValue = () => {
+    if (posts.length === 0) {
+      return postsSkeletonTemplateData;
+    }
+    return posts;
+  };
+
+  const validateLoadingTemplate = () => {
+    if (posts.length === 0) {
+      return SkeletonTemplate;
+    }
+    return PostTemplate;
+  };
 
   return (
     <div className="card w-full">
       <ModalPost />
       <DataView
-        value={posts}
-        itemTemplate={PostTemplate}
+        value={validateLoadingValue()}
+        itemTemplate={validateLoadingTemplate()}
         header={PostsViewHeader()}
       />
       <NativePaginator

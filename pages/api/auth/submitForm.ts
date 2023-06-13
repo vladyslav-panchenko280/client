@@ -1,6 +1,6 @@
 import type { FormData } from "lib/interfaces/LoginForm";
 import { login } from "lib/auth/login";
-import { setErrorMessage } from "src/features/Login/loginService";
+import { setErrorMessage } from "src/features/Login/LoginService";
 import type { Dispatch, AnyAction } from "@reduxjs/toolkit";
 import type { NextRouter } from "next/router";
 
@@ -22,8 +22,7 @@ export const submitForm = async (
       // Redirect to index page
       router.push("/");
     } else {
-      const errorResult = await response.json();
-      dispatch(setErrorMessage({ message: errorResult.message }));
+      dispatch(setErrorMessage({ message: response.message }));
     }
   } catch (error: any) {
     dispatch(

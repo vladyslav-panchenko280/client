@@ -90,7 +90,7 @@ const modalPostSlice = createSlice({
       state.inputs.content = "";
       state.inputs.contentSnippet = "";
       state.inputs.guid = "";
-      state.inputs.isoDate = "";
+      state.inputs.pubDate = "";
       state.inputs.categories = [];
       state.inputs.isoDate = "";
     },
@@ -99,11 +99,6 @@ const modalPostSlice = createSlice({
     },
     setVisible: (state, action: PayloadAction<ModalPostVisible>) => {
       state.properties.isVisible = action.payload;
-    },
-    modalClose: () => {
-      setResetValues();
-      setError("");
-      setVisible(false);
     },
     setSubmitFunc: (
       state,
@@ -121,7 +116,6 @@ export const {
   setLink,
   setPubDate,
   setDcCreator,
-  modalClose,
   setSubmitFunc,
   setContent,
   setContentSnippet,

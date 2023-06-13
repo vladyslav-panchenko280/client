@@ -1,4 +1,4 @@
-import { FC } from "react";
+import type { FC } from "react";
 import { InputModalInterface } from "lib/interfaces/ModalPost";
 
 const InputModal: FC<InputModalInterface> = ({

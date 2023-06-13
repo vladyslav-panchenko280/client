@@ -30,6 +30,16 @@ const PostsViewHeader = () => {
     (state: RootState) => state.postsView.filterOptions
   );
 
+  const posts = useSelector((state: RootState) => state.postsCRUD.postsData);
+
+  const handleInputsState = () => {
+    if (posts.length !== 0) {
+      return false;
+    } else {
+      return true;
+    }
+  };
+
   const handleAddButton: HandleAddButton = () => {
     dispatch(setVisible(true));
     dispatch(setSubmitFunc(addPost));
@@ -37,7 +47,7 @@ const PostsViewHeader = () => {
 
   const inputRef = useRef<HTMLInputElement>(null);
   return (
-    <div className="flex flex-column justify-content-between xl:flex-row">
+    <div className="flex gap-4 flex-column justify-content-between xl:flex-row">
       <div className="flex gap-3">
         <Dropdown
           options={sortOptions}
@@ -46,12 +56,14 @@ const PostsViewHeader = () => {
           placeholder={sortOptions[0].label}
           onChange={(event) => dispatch(sortChange(event.value))}
           className="min-w-0"
+          disabled={handleInputsState()}
         />
         <Button
           label={"New post"}
           icon={"pi pi-plus"}
           className="mr-2"
           onClick={handleAddButton}
+          disabled={handleInputsState()}
         />
       </div>
       <div className="p-inputgroup flex min-w-0 w-auto">
@@ -64,17 +76,20 @@ const PostsViewHeader = () => {
           optionLabel="name"
           placeholder={filterKey === "" ? "Select filter criteria" : filterKey}
           className="w-1 md:w-14rem"
+          disabled={handleInputsState()}
         />
         <InputText
           placeholder="Search"
           ref={inputRef}
           className="w-5 md:w-14rem"
+          disabled={handleInputsState()}
         />
         <Button
           label="Search"
           onClick={() => {
             dispatch(setFilterValue(inputRef.current?.value ?? ""));
           }}
+          disabled={handleInputsState()}
         />
       </div>
     </div>

@@ -1,9 +1,9 @@
 import { InputText } from "primereact/inputtext";
 import { useDispatch, useSelector } from "react-redux";
 import type { RootState } from "src/app/store";
-import { FC } from "react";
-import { InputFormProps, HandleInputChange } from "lib/interfaces/LoginForm";
-import { setFormData, setErrorMessage } from "src/features/Login/loginService";
+import type { FC } from "react";
+import { InputFormProps } from "lib/interfaces/LoginForm";
+import { handleInputChange } from "lib/auth/handleInputChange";
 
 const InputForm: FC<InputFormProps> = ({ title, inputType }) => {
   const dispatch = useDispatch();
@@ -11,23 +11,6 @@ const InputForm: FC<InputFormProps> = ({ title, inputType }) => {
   const errorMessage = useSelector(
     (state: RootState) => state.loginForm.errorMessage
   );
-
-  // Handle input changing while user typing
-  const handleInputChange: HandleInputChange = (event) => {
-    const { id, value } = event.target;
-
-    // Dynamically change form data
-    dispatch(
-      setFormData({
-        ...formData,
-        [id]: value,
-      })
-    );
-
-    // Clear error message
-    dispatch(setErrorMessage({ message: "" }));
-  };
-
   return (
     <>
       <label
@@ -43,10 +26,9 @@ const InputForm: FC<InputFormProps> = ({ title, inputType }) => {
         className={
           errorMessage.message ? "w-full mb-3 p-invalid" : "w-full mb-3"
         }
-        onChange={handleInputChange}
+        onChange={(event) => handleInputChange(event, dispatch, formData)}
       />
     </>
   );
 };
-
 export default InputForm;

@@ -1,28 +1,20 @@
 import { Button } from "primereact/button";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "src/app/store";
-import { submitForm } from "pages/api/auth/submitForm";
 import { useRouter } from "next/router";
-import { validateLoginForm } from "lib/validators/validateLoginForm";
 import InputForm from "src/components/LoginForm/InputForm";
-import { setErrorMessage } from "src/features/Login/loginService";
-import type { ValidateAndSubmitForm } from "lib/interfaces/LoginForm";
+import { validateAndSubmitForm } from "lib/auth/validateAndSubmitForm";
+import ErrorMessage from "src/components/ErrorMessage/ErrorMessage";
+import type { FC } from "react";
 
 // Login Form
-const LoginForm = () => {
+const LoginForm: FC = () => {
   const router = useRouter();
   const dispatch = useDispatch();
   const formData = useSelector((state: RootState) => state.loginForm.formData);
   const errorMessage = useSelector(
     (state: RootState) => state.loginForm.errorMessage
   );
-  const validateAndSubmitForm: ValidateAndSubmitForm = async () => {
-    if (await validateLoginForm(formData)) {
-      await submitForm(router, dispatch, formData);
-    } else {
-      dispatch(setErrorMessage({ message: "" }));
-    }
-  };
 
   return (
     <div className="flex align-items-center justify-content-center w-full mb-8">
@@ -37,14 +29,15 @@ const LoginForm = () => {
           <InputForm title="Password" inputType="password" />
 
           <Button
-            onClick={validateAndSubmitForm}
+            onClick={() => validateAndSubmitForm(formData, router, dispatch)}
             label="Sign In"
             icon="pi pi-user"
             className="w-full mb-3 p-ripple"
           />
-          {errorMessage.message !== "" && (
-            <div className="text-pink-500">{errorMessage.message}</div>
-          )}
+          <ErrorMessage
+            error={errorMessage.message}
+            errorText={errorMessage.message}
+          />
         </div>
       </div>
     </div>

@@ -1,6 +1,6 @@
 import styles from "./Header.module.css";
 import Container from "./Container";
-import { FC } from "react";
+import type { FC } from "react";
 
 const Header: FC = () => {
   return (

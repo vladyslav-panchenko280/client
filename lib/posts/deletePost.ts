@@ -12,5 +12,5 @@ export const deletePost = async (token: Token, id: PostGuid) => {
       "Content-Type": "application/json",
       "x-access-token": token,
     },
-  });
+  }).catch((error) => error);
 };
